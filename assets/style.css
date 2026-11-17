@@ -23,3 +23,7 @@ footer { margin-top:60px; font-size:13px; color:var(--muted); }
 .original p { margin:4px 0; }
 .original a { font-weight:600; }
 .muted { color:var(--muted); font-size:13px; }
+
+.diagram { margin:26px 0; }
+.diagram svg { width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:6px; background:#fbfbf8; }
+.diagram figcaption { font-size:13px; color:var(--muted); margin-top:8px; }

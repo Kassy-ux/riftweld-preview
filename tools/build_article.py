@@ -1,5 +1,6 @@
 import html, json, pathlib, re, sys
 import markdown
+from diagrams import DIAGRAMS
 
 draft_path, slug = sys.argv[1], sys.argv[2]
 d = json.load(open(draft_path))
@@ -20,6 +21,15 @@ if m:
     sources = m.group(1)
     rendered = rendered[:m.start()]
 
+diagram_top = diagram_bottom = ""
+diag = DIAGRAMS.get(slug)
+if diag:
+    block = f'<figure class="diagram">{diag["svg"]}<figcaption>{html.escape(diag["caption"])}</figcaption></figure>'
+    if diag.get("position") == "top":
+        diagram_top = block
+    else:
+        diagram_bottom = block
+
 original = ""
 if meta:
     original = (
@@ -38,8 +48,10 @@ page = f"""<!doctype html>
 <h1>{html.escape(title)}</h1>
 <p class="standfirst">{html.escape(standfirst)}</p>
 <div class="meta"><span>Style: {html.escape(d.get('author_name',''))}</span><span>Status: review</span></div>
+{diagram_top}
 {rendered}
 <div class="src"><strong>Sources</strong>{sources}</div>
+{diagram_bottom}
 {original}
 <footer>Preview build from the headless writer session. Not the Riftweld production site.</footer>
 </div></body></html>"""
