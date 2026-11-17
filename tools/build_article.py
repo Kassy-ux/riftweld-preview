@@ -3,6 +3,8 @@ import markdown
 
 draft_path, slug = sys.argv[1], sys.argv[2]
 d = json.load(open(draft_path))
+d["title"] = d["title"].replace(" \u2014 ", ", ").replace(" \u2013 ", ", ")
+d["standfirst"] = d.get("standfirst","").replace(" \u2014 ", ", ").replace(" \u2013 ", ", ")
 body = d["body"]
 if body.startswith("# "):
     cut = body.find("\n## ")
