@@ -22,8 +22,8 @@ entry = (
     f'<span>{d["standfirst"]}</span></a>'
 )
 if slug not in index:
-    index = index.replace('<div class="list" id="list"></div>',
-                          f'<div class="list" id="list">{entry}</div>')
+    index = index.replace('<div class="list" id="list">',
+                          '<div class="list" id="list">' + entry, 1)
     index_path.write_text(index)
 
 page = f"""<!doctype html>
