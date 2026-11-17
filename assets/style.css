@@ -27,3 +27,7 @@ footer { margin-top:60px; font-size:13px; color:var(--muted); }
 .diagram { margin:26px 0; }
 .diagram svg { width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:6px; background:#fbfbf8; }
 .diagram figcaption { font-size:13px; color:var(--muted); margin-top:8px; }
+
+.photo { margin:26px 0; }
+.photo img { width:100%; height:auto; display:block; border-radius:6px; border:1px solid var(--line); }
+.photo figcaption { font-size:13px; color:var(--muted); margin-top:8px; }

@@ -1,0 +1,62 @@
+{
+  "who-was-mining-crypto-on-13-organizations-camera-servers-and-which-flaw-let-them-in": {
+    "file": "assets/img/cctv-mumbai.jpg",
+    "alt": "Two CCTV cameras mounted on a pole in Mumbai",
+    "caption": "Internet-exposed camera and management interfaces were the common thread across the 13 victim organisations.",
+    "artist": "Punit Rajpal",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source": "https://commons.wikimedia.org/wiki/File:CCTV_cameras_in_Mumbai.jpg",
+    "title": "File:CCTV cameras in Mumbai.jpg"
+  },
+  "a-mining-ceo-blamed-ai-the-blockchain-kept-its-own-notes": {
+    "file": "assets/img/bitcoin-mining-farm.jpg",
+    "alt": "Rows of bitcoin mining rigs on shelves",
+    "caption": "The redirect moved real hashrate across a physical fleet, not just a dashboard.",
+    "artist": "Marko Ahtisaari",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Bitcoin_mining_farm.jpg",
+    "title": "File:Bitcoin mining farm.jpg"
+  },
+  "selling-ai-and-blaming-ai-were-never-the-same-decision": {
+    "file": "assets/img/news-microphones.jpg",
+    "alt": "A cluster of microphones at a press conference",
+    "caption": "The claim was made in public, by a chief executive, about an incident still under investigation.",
+    "artist": "Tony Webster",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:News_Microphones_at_Press_Conference.jpg",
+    "title": "File:News Microphones at Press Conference.jpg"
+  },
+  "someone-moved-the-pool-settings-what-the-luxor-commander-hijack-teaches-us": {
+    "file": "assets/img/antminer.jpeg",
+    "alt": "An Antminer ASIC bitcoin miner",
+    "caption": "The chain ended in XMRig; the physical object the attackers wanted is the miner.",
+    "artist": "Steve Rainwater from Irving, US",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Antminer_ASIC_Miner.jpeg",
+    "title": "File:Antminer ASIC Miner.jpeg"
+  },
+  "a-dashboard-is-a-load-bearing-wall": {
+    "file": "assets/img/server-rack.jpg",
+    "alt": "The rear of a server rack with network cables",
+    "caption": "One dashboard, one credential, one redirect: the load-bearing wall is the centralised layer.",
+    "artist": "Derrick Coetzee from Berkeley, CA, USA",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source": "https://commons.wikimedia.org/wiki/File:Rear_of_rack_at_NERSC_data_center_-_closeup.jpg",
+    "title": "File:Rear of rack at NERSC data center - closeup.jpg"
+  },
+  "bulk-discount-how-a-fleet-manager-s-pool-setting-redirected-bitcoin-hashrate": {
+    "file": "assets/img/ethernet-switch.jpg",
+    "alt": "An Ethernet switch in a rack",
+    "caption": "The change happened at the pool-setting layer, not in Bitcoin's protocol.",
+    "artist": "Raysonho @ Open Grid Scheduler / Grid Engine",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source": "https://commons.wikimedia.org/wiki/File:EthernetSwitch.jpg",
+    "title": "File:EthernetSwitch.jpg"
+  }
+}

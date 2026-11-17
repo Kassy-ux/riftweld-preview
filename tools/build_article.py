@@ -1,6 +1,7 @@
 import html, json, pathlib, re, sys
 import markdown
 from diagrams import DIAGRAMS
+import pathlib as _pl
 
 draft_path, slug = sys.argv[1], sys.argv[2]
 d = json.load(open(draft_path))
@@ -21,6 +22,22 @@ if m:
     sources = m.group(1)
     rendered = rendered[:m.start()]
 
+photos = json.load(open("photos.json"))
+photo = photos.get(slug)
+photo_block = ""
+if photo:
+    credit = html.escape(photo.get("artist") or "Unknown")
+    lic = html.escape(photo.get("license") or "")
+    lic_url = html.escape(photo.get("license_url") or "")
+    lic_html = f'<a href="{lic_url}">{lic}</a>' if lic_url else lic
+    photo_block = (
+        '<figure class="photo">'
+        f'<img src="../{photo["file"]}" alt="{html.escape(photo.get("alt",""))}" loading="lazy">'
+        f'<figcaption>{html.escape(photo.get("caption",""))} '
+        f'<a href="{html.escape(photo.get("source",""))}">Photo: {credit}</a> / Wikimedia Commons ({lic_html}).</figcaption>'
+        '</figure>'
+    )
+
 diagram_top = diagram_bottom = ""
 diag = DIAGRAMS.get(slug)
 if diag:
@@ -40,6 +57,13 @@ if meta:
         '</div>'
     )
 
+rendered_with_photo = rendered
+if photo_block:
+    if "</h2>" in rendered_with_photo:
+        rendered_with_photo = rendered_with_photo.replace("</h2>", "</h2>\n" + photo_block, 1)
+    else:
+        rendered_with_photo = photo_block + rendered_with_photo
+
 page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)} · Riftweld preview</title><link rel="stylesheet" href="../assets/style.css"></head>
@@ -49,12 +73,13 @@ page = f"""<!doctype html>
 <p class="standfirst">{html.escape(standfirst)}</p>
 <div class="meta"><span>Style: {html.escape(d.get('author_name',''))}</span><span>Status: review</span></div>
 {diagram_top}
-{rendered}
+{rendered_with_photo}
 <div class="src"><strong>Sources</strong>{sources}</div>
 {diagram_bottom}
 {original}
 <footer>Preview build from the headless writer session. Not the Riftweld production site.</footer>
 </div></body></html>"""
+
 out = pathlib.Path("articles") / f"{slug}.html"
 out.write_text(page)
 
