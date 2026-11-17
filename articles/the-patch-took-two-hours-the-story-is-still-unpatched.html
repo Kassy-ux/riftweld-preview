@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Patch Took Two Hours. The Story Is Still Unpatched. · Riftweld preview</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<p class="eyebrow">Riftweld · headless writer test</p>
+<h1>The Patch Took Two Hours. The Story Is Still Unpatched.</h1>
+<p class="standfirst">Luxor patched the breach in two hours and promised to pay every affected customer back. Then it blamed AI for an attack nobody has explained yet. That's a marketing decision, and marketing decisions outlive patches.</p>
+<div class="meta"><span>Style: Amanda Natividad</span><span>Status: review</span><span>Report 466</span></div>
+<h2>So what did the extra sentence cost?</h2>
+<p>CEO Nick Hansen described the cause as <a href="https://x.com/hash_bender/status/2122016210628096216">"a sophisticated AI-enabled vector."</a> He apologized in the same breath, "You trust us with your fleet, and we need to be better", which is the right instinct. Then he added that crypto businesses are "inundated with AI-enabled attacks," with abliterated models (open-weight models with the safety rails stripped) probing systems around the clock.</p>
+<p>Here's my problem, and I'll admit it's partly a marketing person's problem: that sentence is a claim, and nobody has shown the work.</p>
+<p>As of Nov 17, the technical post-mortem Luxor promised still hadn't shipped: no entry point, no log findings, no explanation of how the pool settings changed. Independent coverage says so plainly: Altcoin Buzz's headline literally asks <a href="https://www.altcoinbuzz.io/luxor-s-miner-hijack-was-ai-behind-the-attack">"Was AI Behind the Attack?"</a> and <a href="https://www.tftc.io/luxor-commander-hijack-ai-attack-hashrate-redirect-ocean">TFTC</a> calls the AI attribution Hansen's self-reported framing, not a verified description of the exploit. CoreX Hosting, the mining host that raised the first public alarm, went the other way and said it had "isolated what I think is the program used", pointing at something on the operator side. <a href="https://docs.luxor.tech/platform/commander/automation/bulk-actions">Luxor's documentation</a> says Commander keeps an Actions Log recording who created an action, from which site and agent, at what time. No public account has shared what that log showed.</p>
+<p>To be fair: it is entirely possible AI was involved. Automated probing is real, and Hansen's broader warning isn't crazy. But "possible" is doing an enormous amount of work inside "sophisticated AI-enabled vector." The confirmed facts support a more mundane sentence: someone got into a fleet-management tool and changed pool settings. Less scary, and the only one the evidence currently supports.</p>
+<p>And here's the part that makes me wince. Luxor <a href="https://theblock.co/news/business/2026-11-15-luxor-attack-client-hashrate-440810">announced Luxor AI in September 2026</a>, extending its mining infrastructure into AI and high-performance computing, and <a href="https://www.theblock.co/news/deals/2026-10-27-bitcoin-mining-ai-luxor-technology-funding-431858">raised $16 million last month</a> in a round led by CMT Digital, with Canaan, MicroBT, Halo and Steelhead among the participants. The company blaming AI for the breach is also selling AI to the same industry. That doesn't make the claim false. It makes it a marketing event as well as a security one, intended or not.</p>
+<h2>The numbers are smaller than the story</h2>
+<p>The scale matters, because the adjectives inflate it. CoreX estimated roughly 64,000 machines and about 13 EH/s, around 1.4% of Bitcoin's network hashrate at the time. Hansen told <a href="https://theblock.co/news/business/2026-11-15-luxor-attack-client-hashrate-440810">The Block</a> the affected hashrate "was about 13 EH in total, which is ~$20,000/hr." OCEAN's dashboard briefly showed around 50 EH/s, per TFTC, dashboard data, not an audited figure.</p>
+<p>On the money: two confirmed coinbase payouts to the identified address totaled ≈0.162 BTC, about $10,500 at the time. An earlier ≈0.657 BTC estimate came from OCEAN's dashboard, per mempool.space developer Mononaut; estimated rewards are not payments. The two haven't been reconciled in public.</p>
+<p>None of that is catastrophic. That's the point. A contained incident with a fast patch and full compensation is a trust-building event waiting to happen. What turns it into a trust story is the gap between the certainty of the language and the uncertainty of the record.</p>
+<p>There's a timeline wrinkle. Luxor says Commander was patched within two hours of detection. CoreX said the attack was still under way at ~03:57 UTC on Nov 15, and onchain payouts landed at 17:22 and 22:54 UTC that day. OCEAN's proportional payout system can lag the underlying work, so the timestamps do not prove the redirect continued. But they do not yet sit neatly with the two-hour story either. That's exactly what a post-mortem is for.</p>
+<h2>What we'd actually do</h2>
+<p>I work in marketing, so this is aimed at the marketers and founders, not just the responders.</p>
+<ol>
+<li><strong>Publish the timeline with timestamps and sources.</strong> Not "quickly." Two hours from what, detected when, by whom. The paragraph above shows why: ambiguity becomes a second story.</li>
+<li><strong>Split the page into "what we know" and "what we're still investigating," and date both.</strong> If you cannot demonstrate AI involvement, write "we don't yet know the entry point." That sentence is not weakness. It is the only sentence that survives contact with your own post-mortem.</li>
+<li><strong>Put a date on the post-mortem.</strong> A promised post-mortem with no date is a rumor with better typography. Name the day, then hit it or explain why you didn't.</li>
+<li><strong>Show the audit trail.</strong> You have logs. Share what they say about who changed what, from where. Redact customer identifiers; don't redact the mechanism.</li>
+<li><strong>Pay people back in public, without asking them to be quiet about it.</strong> Compensation with a silence clause attached is a settlement, not a repair, and if the clause ever surfaces, you've bought a second incident.</li>
+<li><strong>Hold the AI claim to the same standard as the AI pitch.</strong> If "AI-powered" is a product claim on Tuesday, it cannot be an alibi on Sunday.</li>
+</ol>
+<p>The patch took two hours. The explanation still hasn't shipped. In the meantime, the scariest available adjective is doing work that a technical document should be doing, and every customer is left guessing whether to rotate credentials, demand hardware keys, or brace for model-driven attacks nobody has described.</p>
+<p>Trust isn't the apology. It's the footnote. And the footnote is still blank.</p>
+<p>The menu can keep saying AI-powered. The incident report can't. Next time you read "sophisticated AI-enabled vector," ask who benefits from the adjective, then ask for the timeline.</p>
+
+<div class="src"><strong>Sources</strong>
+<ul>
+<li><a href="https://x.com/luxor/status/2122018094914601464">Luxor Technology, official statement on X, Nov 15, 2026</a></li>
+<li><a href="https://x.com/hash_bender/status/2122016210628096216">Nick Hansen, post on X, Nov 15, 2026</a></li>
+<li><a href="https://x.com/CoreX_Hosting/status/2121802488898863443">CoreX Hosting, first public alert on X, Nov 15, 2026</a></li>
+<li><a href="https://decrypt.co/383392/hackers-redirected-bitcoin-miner-rewards-ai-attack-luxor">Decrypt, Hackers Redirected Bitcoin Miner Rewards via AI Attack, Luxor CEO Says</a></li>
+<li><a href="https://theblock.co/news/business/2026-11-15-luxor-attack-client-hashrate-440810">The Block, Luxor hit by AI-enabled attack that redirected client hashrate, says vulnerability patched</a></li>
+<li><a href="https://www.tftc.io/luxor-commander-hijack-ai-attack-hashrate-redirect-ocean">TFTC, Luxor Commander Hijack Exposes Centralized Fleet Software as a Single Point of Failure</a></li>
+<li><a href="https://www.altcoinbuzz.io/luxor-s-miner-hijack-was-ai-behind-the-attack">Altcoin Buzz, Luxor's Miner Hijack: Was AI Behind the Attack?</a></li>
+<li><a href="https://news.bitcoin.com/security/luxor-confirms-bitcoin-mining-hack-and-reveals-ai-enabled-attack/">Bitcoin.com News, Luxor Confirms Bitcoin Mining Hack and Reveals AI-Enabled Attack</a></li>
+<li><a href="https://luxor.tech/mining/commander">Luxor, Commander product page</a></li>
+<li><a href="https://docs.luxor.tech/platform/commander/automation/bulk-actions">Luxor Docs, Commander Bulk Actions and Actions Log</a></li>
+</ul></div>
+<footer>Preview build from the headless writer session. Not the Riftweld production site.</footer>
+</div></body></html>
