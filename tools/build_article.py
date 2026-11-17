@@ -3,7 +3,12 @@ import markdown
 
 draft_path, slug = sys.argv[1], sys.argv[2]
 d = json.load(open(draft_path))
-body = d["body"].replace(" \u2014 ", ", ").replace(" \u2013 ", ", ")
+body = d["body"]
+if body.startswith("# "):
+    cut = body.find("\n## ")
+    if cut > 0:
+        body = body[cut + 1:]
+body = body.replace(" \u2014 ", ", ").replace(" \u2013 ", ", ")
 body = body.replace(
     "WHAT DOES A CAMERA SERVICE NEED TO KNOW ABOUT DEFENDER?",
     "WHY DOES A CAMERA SERVICE TOUCH DEFENDER?",
