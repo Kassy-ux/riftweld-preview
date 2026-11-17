@@ -14,3 +14,12 @@ a { color:var(--accent); text-underline-offset:3px; }
 .list a b { font:600 19px/1.4 ui-sans-serif, system-ui, sans-serif; }
 .list a span { display:block; color:var(--muted); font-size:15px; margin-top:4px; }
 footer { margin-top:60px; font-size:13px; color:var(--muted); }
+.item { padding:20px 0; border-bottom:1px solid var(--line); }
+.item-title { text-decoration:none; color:var(--ink); font:600 19px/1.4 ui-sans-serif, system-ui, sans-serif; }
+.item-lede { margin:6px 0; color:var(--muted); font-size:15px; }
+.item-meta { margin:0; font-size:13px; color:var(--muted); }
+.item-meta a { color:var(--accent); }
+.original { margin-top:44px; padding:18px 20px; border:1px solid var(--line); background:#fff; }
+.original p { margin:4px 0; }
+.original a { font-weight:600; }
+.muted { color:var(--muted); font-size:13px; }

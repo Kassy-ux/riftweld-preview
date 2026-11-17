@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Who Was Mining Crypto on 13 Organizations' Camera Servers, and Which Flaw Let Them In? · Riftweld preview</title><link rel="stylesheet" href="../assets/style.css"></head>
+<title>Who Was Mining Crypto on 13 Organizations&#x27; Camera Servers, and Which Flaw Let Them In? · Riftweld preview</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><div class="wrap">
 <p class="eyebrow">Riftweld · headless writer test</p>
-<h1>Who Was Mining Crypto on 13 Organizations' Camera Servers, and Which Flaw Let Them In?</h1>
-<p class="standfirst">Huntress's security operations center watched a GeoVision service start PowerShell on host after host. GeoVision's April advisory had already named three flaws in its WebCam Server.</p>
-<div class="meta"><span>Style: Brian Krebs</span><span>Status: review</span><span>Report 466</span></div>
+<h1>Who Was Mining Crypto on 13 Organizations&#x27; Camera Servers, and Which Flaw Let Them In?</h1>
+<p class="standfirst">Huntress&#x27;s security operations center watched a GeoVision service start PowerShell on host after host. GeoVision&#x27;s April advisory had already named three flaws in its WebCam Server.</p>
+<div class="meta"><span>Style: Brian Krebs</span><span>Status: review</span></div>
 <h2>WHAT DID THE CAMERA SERVICE DO?</h2>
 <p>Three PowerShell scripts, labeled <code>a</code>, <code>b</code>, and <code>c</code>, came down from <code>45.32.117.34</code>. The first ran in memory, searched for writable directories, and checked whether Microsoft Defender was active. The second was written to disk, launched through WMI, repeated the directory probe, and pulled a kernel driver that VirusTotal identified as <code>wsftprm.sys</code>, the driver Huntress calls <code>kvckiller.sys</code>, and one with prior form in bring-your-own-vulnerable-driver attacks, where an intruder supplies a legitimately signed but flawed driver to get around antivirus.</p>
 <p>Then came the registry work. Huntress observed three Image File Execution Options hijacks, abusing a Windows troubleshooting feature that lets an administrator point a "debugger" at an executable. The Debugger values for <code>MsMpEng.exe</code>, <code>SecurityHealthService.exe</code>, and <code>SecurityHealthSystray.exe</code> were each set to <code>systray.exe</code>. The likely purpose was to keep Defender's engine, the Windows Security service, and its notification applet from starting.</p>
@@ -58,5 +58,6 @@
 <li>HashLytics, <a href="https://hashlytics.io/geovision-flaw-allowed-cryptojackers-to-hit-13-orgs/">GeoVision flaw allowed cryptojackers to hit 13 orgs</a>, November 17, 2026. Cited for the correction above.</li>
 <li>OpenCVE, <a href="https://app.opencve.io/cve/CVE-2026-42370">CVE-2026-42370</a>, KEV status check.</li>
 </ul></div>
+<div class="original"><p><strong>Reference article by Brian Krebs</strong></p><p><a href="https://krebsonsecurity.com/2026/06/who-runs-the-ransomware-group-the-gentlemen/">Who Runs the Ransomware Group &#x27;The Gentlemen?&#x27;</a></p><p class="muted">The article above is written in an original voice informed by this author's style. It is not by Brian Krebs.</p></div>
 <footer>Preview build from the headless writer session. Not the Riftweld production site.</footer>
 </div></body></html>

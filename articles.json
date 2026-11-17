@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "who-was-mining-crypto-on-13-organizations-camera-servers-and-which-flaw-let-them-in",
+    "title": "Who Was Mining Crypto on 13 Organizations' Camera Servers, and Which Flaw Let Them In?",
+    "standfirst": "Huntress's security operations center watched a GeoVision service start PowerShell on host after host. GeoVision's April advisory had already named three flaws in its WebCam Server.",
+    "author_id": "brian-krebs",
+    "author_name": "Brian Krebs",
+    "original_title": "Who Runs the Ransomware Group 'The Gentlemen?'",
+    "original_url": "https://krebsonsecurity.com/2026/06/who-runs-the-ransomware-group-the-gentlemen/"
+  },
+  {
+    "slug": "a-mining-ceo-blamed-ai-the-blockchain-kept-its-own-notes",
+    "title": "A Mining CEO Blamed AI. The Blockchain Kept Its Own Notes.",
+    "standfirst": "Luxor's chief executive called it an AI-enabled attack and apologized for it. Then the pool paid out twice to a single address, and the document that would settle the question did not appear.",
+    "author_id": "andy-greenberg",
+    "author_name": "Andy Greenberg",
+    "original_title": "Hackers Stalked Me by Hijacking a Smartwatch for Kids",
+    "original_url": "https://www.wired.com/story/hackers-stalked-me-by-hijacking-a-smartwatch-for-kids"
+  },
+  {
+    "slug": "selling-ai-and-blaming-ai-were-never-the-same-decision",
+    "title": "Selling AI and Blaming AI Were Never the Same Decision",
+    "standfirst": "Luxor patched Commander in two hours and pledged to pay every affected client back. Then it blamed a “sophisticated AI-enabled vector”, and put the receipt on layaway.",
+    "author_id": "amanda-natividad",
+    "author_name": "Amanda Natividad",
+    "original_title": "What Pokemon Pokopia Taught Me About the Future of Marketing",
+    "original_url": "https://sparktoro.com/blog/what-pokemon-pokopia-taught-me-about-the-future-of-marketing/"
+  },
+  {
+    "slug": "someone-moved-the-pool-settings-what-the-luxor-commander-hijack-teaches-us",
+    "title": "Someone moved the pool settings: what the Luxor Commander hijack teaches us",
+    "standfirst": "Luxor's fleet dashboard briefly sent other people's mining work to a different pool. Nobody needed a private key, no bitcoin was broken, and the bill is being picked up.",
+    "author_id": "paul-ducklin",
+    "author_name": "Paul Ducklin",
+    "original_title": "Researchers claim Windows \"backdoor\" affects hundreds of Gigabyte motherboards",
+    "original_url": "https://nakedsecurity.sophos.com/2023/06/02/researchers-claim-windows-backdoor-affects-hundreds-of-gigabyte-motherboards/"
+  },
+  {
+    "slug": "a-dashboard-is-a-load-bearing-wall",
+    "title": "A Dashboard Is a Load-Bearing Wall",
+    "standfirst": "One compromised dashboard moved industrial mining capacity last weekend without touching a rig, a private key, or a line of Bitcoin's code. The AI framing explains the least about why it worked.",
+    "author_id": "bruce-schneier",
+    "author_name": "Bruce Schneier",
+    "original_title": "AI and Trust",
+    "original_url": "https://www.schneier.com/essays/archives/2023/12/ai-and-trust.html"
+  },
+  {
+    "slug": "bulk-discount-how-a-fleet-manager-s-pool-setting-redirected-bitcoin-hashrate",
+    "title": "Bulk Discount: How a Fleet Manager's Pool Setting Redirected Bitcoin Hashrate",
+    "standfirst": "Luxor patched a fleet-management compromise within two hours of detecting it, promised to pay clients in full, and called the cause an AI-enabled vector. The redirect is documented. The AI is not.",
+    "author_id": "james-kettle",
+    "author_name": "James Kettle",
+    "original_title": "HTTP/2: The Sequel is Always Worse",
+    "original_url": "https://portswigger.net/research/http2"
+  }
+]
