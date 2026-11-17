@@ -29,5 +29,6 @@ footer { margin-top:60px; font-size:13px; color:var(--muted); }
 .diagram figcaption { font-size:13px; color:var(--muted); margin-top:8px; }
 
 .photo { margin:26px 0; }
-.photo img { width:100%; height:auto; display:block; border-radius:6px; border:1px solid var(--line); }
+.photo img { display:block; width:100%; max-width:640px; max-height:280px; object-fit:cover; object-position:center; margin:0 auto; border-radius:6px; border:1px solid var(--line); }
 .photo figcaption { font-size:13px; color:var(--muted); margin-top:8px; }
+@media (max-width:620px) { .photo img { max-height:200px; } }
