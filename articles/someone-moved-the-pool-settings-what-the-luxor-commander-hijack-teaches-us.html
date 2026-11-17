@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Someone moved the pool settings: what the Luxor Commander hijack teaches us · Riftweld preview</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<p class="eyebrow">Riftweld · headless writer test</p>
+<h1>Someone moved the pool settings: what the Luxor Commander hijack teaches us</h1>
+<p class="standfirst">Luxor's fleet dashboard briefly sent other people's mining work to a different pool. Nobody needed a private key, no bitcoin was broken, and the bill is being picked up.</p>
+<div class="meta"><span>Style: Paul Ducklin</span><span>Status: review</span><span>Report 466</span></div>
+<p>The good news is that nobody needed to steal a private key. The bad news is that nobody needed to, and at 6:00 p.m. Pacific on Saturday 14 November, somebody demonstrated it on Luxor's fleet-management dashboard. If you run a fleet, the checklist is at the end.</p>
+<h2>What happened?</h2>
+<p>Luxor says its internal monitoring spotted an unauthorised redirect of hashrate through Commander, its fleet-management tool. Hashrate is the computing power a miner throws at the network; a pool gathers that work and shares out the rewards. Attackers changed where that work was pointed, sending customer machines to another pool for a limited window.</p>
+<p>Luxor patched Commander within two hours of detection and began restoring affected machines to their original pool settings. It says "just over a dozen" client accounts were affected, no data was leaked or exfiltrated, and the problem was isolated to Commander: Luxor Pool and LuxOS were untouched. Every affected client will be paid in full, "as if it had mined normally", and a post-mortem has been promised.</p>
+<p>Chief executive Nick Hansen was not relaxed. The compromise began, he wrote, "through a sophisticated AI-enabled vector", and he added: "You trust us with your fleet, and we need to be better."</p>
+<p>A mining host raised the first alarm. CoreX Hosting posted at about 03:08 UTC on 15 November: "Just a heads up, there is a big miner hack going on as we speak. Miners are being pointed at @ocean_mining with BTC address bc1qphukp9rjfc4rcej7erpm9ae20xmtspw8pcddrr." CoreX said its whole farm was hit and blamed Commander. Nearly an hour later, it said the attack was still running at roughly 13 exahashes per second (EH/s): "I am changing miners back as I can."</p>
+<p>CoreX estimated about 64,000 machines and 13 EH/s pointed at OCEAN, roughly 1.4% of Bitcoin's network hashrate at the time (about 934 EH/s). Luxor has not confirmed either figure. CoreX later revised the unauthorised hashrate to around 100 petahashes per second (PH/s), a tenth of an exahash. TFTC notes OCEAN's public dashboard briefly spiked to around 50 EH/s, though that is an unaudited dashboard figure.</p>
+<p>The money is small. Mempool.space developer Mononaut put it at about 0.657 BTC of "shares earned from stolen hash" on OCEAN's dashboard, per Bitcoin.com News, estimated rewards, not payment. Altcoin Buzz's onchain review found two confirmed coinbase payouts, 0.08088977 BTC in block 975,995 and 0.08113106 BTC in block 976,029, totalling 0.16202083 BTC, about $10,512 at the $64,883 price CoinGecko recorded on 16 November. Per TFTC they were unspent as of 16 November and no blocks were solo-mined; the payments reflect OCEAN's proportional, TIDES-style distribution. Why 0.657 versus 0.162? Probably dashboard estimates versus final coinbase payments; no public source reconciles them.</p>
+<p>Here is what does not add up. Luxor says the patch took under two hours. CoreX says the attack was still going at about 03:57 UTC, roughly three hours after the 6:00 p.m. PDT start, and the payouts landed at 17:22 and 22:54 UTC that day. Proportional payouts can lag the work, so the timestamps do not prove the redirect continued, but the public timeline is not closed.</p>
+<h2>How does a dashboard move a whole farm?</h2>
+<p>Commander is fleet-management software: real-time monitoring, bulk remote commands and automated profitability tuning in one console. Its documentation describes a "Change Pool Settings" command that updates the pool address miners connect to, the worker name and the password for selected machines, and such commands can run across hundreds or thousands of miners in one bulk action.</p>
+<p>Read that again. The same button that lets a site manager retarget a thousand rigs lets anyone who reaches that console retarget a thousand rigs.</p>
+<p>Think of the payroll system rather than the safe. No keys were lifted, no hardware was bricked, no miner was touched. Somebody changed the forwarding address on the pay packet.</p>
+<p>Commander also keeps an Actions Log: action, creator (user, automation rule or trigger, or "Intelligent Miner"), site, agent, miners affected, timestamp and status.</p>
+<p>Two things follow. Any central console, Commander, Foreman, Awesome Miner, a homegrown one, has a single place where one stolen credential or API key can retarget a fleet. TFTC's line is that the convenience and the risk are the same feature.</p>
+<p>OCEAN's noncustodial design limits the theft version of this attack but not the redirection version. Payouts go straight to the address written into the block reward, but that address is chosen upstream, at the fleet-management layer. A noncustodial pool protects you from a pool running off with your coins, not from someone changing which pool you are pointed at.</p>
+<p>And what did not happen matters. Bitcoin was not compromised: no blocks were manipulated, no transactions double-spent. The protocol was fine. The console was not.</p>
+<h2>Was it really an AI attack?</h2>
+<p>The coverage keeps circling this question. The honest answer: it is not established.</p>
+<p>Hansen called it "a sophisticated AI-enabled vector" and did not publish how access was gained. As of 17 November there is no post-mortem, no CVE and no advisory, Commander is proprietary, and the fix was server-side.</p>
+<p>The phrase doing the work is "abliterated models", open-weight models with their safety guardrails stripped out. Luxor's response has been to buy bare-metal GPUs to run such models defensively, put most new feature work on hold, and harden its systems by rotating keys, updating kernels and pinning dependencies. Hansen says crypto businesses are "inundated with AI-enabled attacks", with these models "running 24/7 against your entire surface".</p>
+<p>That may be true. It is also the vendor's account of its own breach, with no technical detail attached. Altcoin Buzz's headline asks the question directly: "Was AI Behind the Attack?" TFTC makes the same point: abliterated models or a conventional credential compromise is what the post-mortem must answer.</p>
+<p>The second unresolved question decides who has to fix what. CoreX hinted the problem might sit on the operator side, saying it had "isolated what I think is the program used". Whether the entry point was Luxor's infrastructure or a customer's Commander credentials is not public.</p>
+<p>The irony: Luxor announced "Luxor AI" in September 2026 and raised $16 million last month in a round led by CMT Digital, with Canaan, MicroBT, Halo and Steelhead participating. The company warning about AI-enabled attacks also sells AI. That does not make the warning wrong, but the post-mortem will be read carefully.</p>
+<p>Elsewhere, Anthropic's September 2026 threat-intelligence report described "automated exploit foundries", and Chainalysis disclosed on 30 October 2026 that an attacker using "offensive agentic techniques" reached customer identity data. Automated probing is real; whether it was the door here is a separate question.</p>
+<h2>What to do?</h2>
+<p>Luxor says users need do nothing. That is a statement about the platform, not your housekeeping: the patch was Luxor's, the audit is yours.</p>
+<ol>
+<li><strong>Put MFA on every fleet console.</strong> Hardware keys where offered, authenticator apps where not, and treat that login like a wallet.</li>
+<li><strong>Prune and rotate.</strong> Remove departed staff, kill stale API tokens, rotate keys that can change pool settings. Least privilege matters when one session can retarget thousands of rigs.</li>
+<li><strong>Read the Actions Log.</strong> Filter pool changes across 14–15 November and check the creator column. A change nobody on your team made is a finding.</li>
+<li><strong>Alert on two things.</strong> Pool configuration changes, and sudden hashrate drops at the pool. If you cannot alert, you cannot detect, you can only hear about it later on X.</li>
+<li><strong>Write the break-glass plan.</strong> Who disables the automations, from where, in what order, and who calls the pool. Test it on a quiet Tuesday, before you need it on a Saturday.</li>
+</ol>
+<p>Better access control shrinks the chance that one credential moves the fleet. It does not change the fact that the fleet can be moved from one console, or settle whether the breach began vendor- or client-side. Compensation does not answer that question.</p>
+<p>Luxor deserves credit: it disclosed quickly, published a statement the same day, named a cause it could have left vague, and pledged to pay. That is better than this industry often manages, and not the same as an explanation.</p>
+<p>Do the five-minute version this week. Open the Actions Log, sort by pool changes, and look for a name you do not recognise. If it is all yours, close the tab. If not, you will be glad you wrote down that phone number in step five.</p>
+<p>Then check who else can change your pool settings. It should be a short list, and it should be shorter.</p>
+
+<div class="src"><strong>Sources</strong>
+<ul>
+<li><a href="https://x.com/luxor/status/2122018094914601464">Luxor Technology official statement, 15 November 2026</a></li>
+<li><a href="https://x.com/hash_bender/status/2122016210628096216">Nick Hansen on X, 15 November 2026</a></li>
+<li><a href="https://x.com/CoreX_Hosting/status/2121802488898863443">CoreX Hosting first public alert, 15 November 2026</a></li>
+<li><a href="https://decrypt.co/383392/hackers-redirected-bitcoin-miner-rewards-ai-attack-luxor">Decrypt: Hackers Redirected Bitcoin Miner Rewards via AI Attack, Luxor CEO Says</a></li>
+<li><a href="https://theblock.co/news/business/2026-11-15-luxor-attack-client-hashrate-440810">The Block: Luxor hit by AI-enabled attack that redirected client hashrate</a></li>
+<li><a href="https://news.bitcoin.com/security/luxor-confirms-bitcoin-mining-hack-and-reveals-ai-enabled-attack/">Bitcoin.com News: Luxor Confirms Bitcoin Mining Hack and Reveals AI-Enabled Attack</a></li>
+<li><a href="https://www.altcoinbuzz.io/luxor-s-miner-hijack-was-ai-behind-the-attack">Altcoin Buzz: Luxor's Miner Hijack, Was AI Behind the Attack?</a></li>
+<li><a href="https://www.tftc.io/luxor-commander-hijack-ai-attack-hashrate-redirect-ocean">TFTC: Luxor Commander Hijack Exposes Centralized Fleet Software as a Single Point of Failure</a></li>
+<li><a href="https://mlq.ai/news/attackers-hijack-bitcoin-mining-power-through-luxors-commander-platform-diverting-up-to-13-ehs-to-the-ocean-pool/">MLQ.ai: attackers divert up to 13 EH/s to the OCEAN pool</a></li>
+<li><a href="https://cryptobriefing.com/luxor-ceo-warns-ai-cyberattacks-mining-hijack/">Crypto Briefing: Luxor CEO warns of rising AI-enabled cyberattacks</a></li>
+<li><a href="https://fr.tradingview.com/news/coinpedia:1c532603d094b:0-luxor-commander-breach-redirects-mining-hashrate-as-attackers-receive-0-162-btc/">Coinpedia via TradingView: attackers receive 0.162 BTC</a></li>
+<li><a href="https://luxor.tech/mining/commander">Luxor Commander product page</a></li>
+<li><a href="https://docs.luxor.tech/platform/commander/automation/bulk-actions">Luxor docs: Commander Bulk Actions and Actions Log</a></li>
+</ul></div>
+<footer>Preview build from the headless writer session. Not the Riftweld production site.</footer>
+</div></body></html>
